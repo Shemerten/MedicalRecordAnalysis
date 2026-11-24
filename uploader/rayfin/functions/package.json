@@ -1,0 +1,17 @@
+{
+  "name": "pdf-uploader-functions",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "dist/src/function_app.js",
+  "scripts": {
+    "prebuild": "node ../../prepare-target.mjs",
+    "build": "tsc --build"
+  },
+  "dependencies": {
+    "@microsoft/fabric-user-data-functions": "2.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1"
+  }
+}

@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>תיק רפואי 360 | סקירה קלינית</title>
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+* { box-sizing:border-box }
+body { margin:0; background:var(--cp-bg); color:var(--cp-text); font:1rem/1.55 "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; }
+button,input,select,textarea { font:inherit; color:inherit }
+button,input,select,textarea { border:1px solid var(--cp-border-strong); border-radius:.625rem; background:var(--cp-surface); }
+input,select,textarea,button { padding:8px 12px; min-height:40px; }
+button { cursor:pointer; font-weight:600; }
+button:hover,button[aria-pressed=true] { background:var(--cp-accent-soft); border-color:var(--cp-accent); }
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:2px solid var(--cp-accent); outline-offset:2px }
+.primary { border-color:var(--cp-accent); background:var(--cp-accent); color:var(--cp-accent-fg); }
+.primary:hover { background:var(--cp-accent-hover); }
+.mast { border-block-end:1px solid var(--cp-border); background:var(--cp-surface); }
+.wrap { max-width:1264px; margin:auto; padding:0 28px; }
+.mast .wrap { display:flex; align-items:center; gap:12px; min-height:64px; }
+.brand { display:grid; place-items:center; width:36px; height:36px; border-radius:.625rem; background:var(--cp-accent); color:var(--cp-accent-fg); font-weight:800 }
+.mast strong { font-size:1.1rem }
+.mast .badge { margin-inline-start:auto; }
+.badge { display:inline-block; padding:3px 8px; border-radius:.625rem; border:1px solid var(--cp-border); background:var(--cp-surface-soft); font-size:.83rem; font-weight:650;white-space:nowrap; }
+.accent { color:var(--cp-accent); border-color:var(--cp-accent); background:var(--cp-accent-soft); }
+.subtle { color:var(--cp-text-muted) }
+.layout { display:grid; grid-template-columns:284px minmax(0, 1fr); gap:20px; align-items:start; margin-block:24px 40px; }
+.panel { border:1px solid var(--cp-border); border-radius:16px; background:var(--cp-surface); padding:20px; min-width:0; }
+h1,h2,h3,h4,h5,p { margin:0; }
+h1 { font-size:clamp(1.72rem,3vw,2.5rem); margin-block:4px 8px; line-height:1.15; }
+h2 { font-size:1.2rem; }
+h3 { font-size:1.04rem; }
+.intro { padding-block-start:28px; }
+.intro p { max-width:720px; }
+.incident { margin-block:16px; }
+.incident form { display:flex; flex-wrap:wrap; gap:12px; align-items:end; margin-block-start:8px; }
+label { display:grid; gap:4px; font-weight:650; }
+.stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin-block:16px; }
+.stat { padding:12px; text-align:start; }
+.stat strong { display:block; font-size:1.3rem; }
+.filters { display:flex; flex-wrap:wrap; gap:12px; margin-block:16px; }
+.filters input,.filters select { max-width:100%; }
+.visits { display:grid; gap:8px; margin-block-start:16px; }
+.visits button { text-align:start; width:100%; }
+.visits button small { display:block; color:var(--cp-text-muted); font-weight:400; }
+.visits button[aria-pressed=true] { color:var(--cp-accent); }
+.cards,.visit-group,.category-group { display:grid; gap:8px; min-width:0; }
+.cards { gap:20px; margin-block-start:12px; }
+.visit-group { gap:12px; }
+.visit-group + .visit-group { padding-block-start:16px; border-block-start:1px solid var(--cp-border); }
+.category-group h4 { font-size:.94rem; color:var(--cp-text-muted); }
+.record h5 { font-size:1.04rem; overflow-wrap:anywhere; }
+.record { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px; border:1px solid var(--cp-border); border-radius:.625rem; }
+.record p { margin-block:4px; }
+.metadata { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.empty { text-align:center; border:1px dashed var(--cp-border-strong); border-radius:.625rem; padding:20px; }
+.notice { margin-block:12px; padding:10px 12px; border-inline-start:3px solid var(--cp-accent); background:var(--cp-accent-soft); }
+.notice:empty { display:none; }
+dialog { width:min(640px,calc(100% - 24px)); max-height:calc(100dvh - 32px); color:var(--cp-text); background:var(--cp-surface); border:1px solid var(--cp-border); border-radius:16px; padding:20px; }
+dialog::backdrop { background:var(--cp-overlay) }
+.editor { display:grid; gap:12px; }
+.fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+textarea { resize:vertical; min-height:72px; }
+blockquote { margin:0; padding:12px; border-inline-start:3px solid var(--cp-accent); background:var(--cp-surface-soft); overflow-wrap:anywhere; }
+.actions { display:flex; flex-wrap:wrap; gap:8px; }
+details ol { padding-inline-start:24px; overflow-wrap:anywhere; }
+[hidden] { display:none!important; }
+@media(max-width:760px) { .wrap {padding-inline:12px} .layout { grid-template-columns:1fr; margin-block-start:12px } .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:410px) { .fields { grid-template-columns:1fr; } .record { flex-wrap:wrap; } }
+</style>
+</head>
+<body>
+<header class="mast"><div class="wrap"><span class="brand" aria-hidden="true">360</span><strong>סקירה קלינית</strong><span class="badge accent">אב־טיפוס · נתונים סינתטיים בלבד</span></div></header>
+<main class="wrap">
+  <div class="intro">
+    <span class="badge">תיק לדוגמה · <bdi>DEMO-001</bdi></span>
+    <h1>תיק רפואי <bdi>360</bdi></h1>
+    <p class="subtle">עברו על ציר הביקורים, בדקו את המקור והעריכו את הקשר לאירוע פעולות איבה. סיווג הקשר ואימות הרשומה הם החלטות נפרדות. אין להשתמש בדמו למידע אמיתי.</p>
+  </div>
+  <section class="panel incident" aria-labelledby="incident-heading">
+    <h2 id="incident-heading">אירוע לסקירה · פעולות איבה</h2>
+    <form id="incident-form">
+      <label>תאריך האירוע <input id="event-date" type="date" required></label>
+      <button type="submit">בחירת אירוע לפי תאריך</button>
+      <span id="active-event" class="subtle"></span>
+    </form>
+    <p id="message" class="notice" role="status" aria-live="polite"></p>
+  </section>
+  <div class="layout">
+    <aside class="panel" aria-labelledby="timeline"><h2 id="timeline">ציר הביקורים</h2><p class="subtle">ישויות ללא שיוך נשארות בתור סקירה.</p><div class="visits" id="visit-list"></div></aside>
+    <section class="panel" aria-labelledby="records-heading">
+      <h2 id="records-heading">ישויות בתיק</h2>
+      <div id="stats" class="stats" aria-label="סינון לפי קשר לאירוע"></div>
+      <div class="filters">
+        <label>קטגוריה <select id="category-filter"></select></label>
+        <label>חיפוש ברשומות <input id="search" type="search" placeholder="למשל: בדיקה"></label>
+      </div>
+      <p id="counts" class="subtle" role="status"></p>
+      <div class="cards" id="records"></div>
+    </section>
+  </div>
+</main>
+<dialog id="review" aria-labelledby="review-title">
+  <form id="review-form" class="editor">
+    <h2 id="review-title"></h2>
+    <div class="metadata"><span id="source-ref" class="badge"></span><span class="subtle">קטע מקור לדוגמה</span></div>
+    <blockquote id="evidence" dir="auto"></blockquote>
+    <p id="review-event" class="subtle"></p>
+    <div class="fields">
+      <label>קשר לאירוע <select id="relation" required></select></label>
+      <label>אימות הרשומה <select id="validation" required></select></label>
+      <label>קטגוריה מתוקנת <select id="edit-category" required></select></label>
+      <label>ביקור משויך <select id="edit-visit"></select></label>
+    </div>
+    <label>נוסח מתוקן (לא חובה) <input id="correction" maxlength="180"></label>
+    <label>נימוק להחלטה <textarea id="reason" required maxlength="350" placeholder="הסבר קצר על סמך המקור. נתוני דמו בלבד."></textarea></label>
+    <div id="form-error" role="alert"></div>
+    <details><summary>היסטוריית החלטות באירוע זה</summary><ol id="history"></ol></details>
+    <div class="actions"><button type="submit" id="save" class="primary">שמירת החלטה בדמו</button><button type="button" id="close">סגירה</button></div>
+  </form>
+</dialog>
+<script>
+const categories = Object.freeze({diagnosis:'אבחנות', medication:'תרופות', test:'בדיקות', treatment:'טיפולים', referral:'הפניות'});
+const relations = Object.freeze({unreviewed:'טרם סווג', related:'קשור לאירוע', unrelated:'לא קשור', uncertain:'ייתכן קשר'});
+const validations = Object.freeze({pending:'טרם אומת', confirmed:'אומת מול המקור', corrected:'תוקן לאחר סקירה', rejected:'נדחה'});
+const visits = Object.freeze([
+  {id:'V1',date:'2025-04-07',title:'ביקור מעקב לדוגמה'},
+  {id:'V2',date:'2025-04-03',title:'ביקור ראשון לדוגמה'},
+  {id:'V3',date:'2025-03-20',title:'ביקור שגרתי לדוגמה'}
+]);
+const entities = Object.freeze([
+  {id:'E1',type:'diagnosis',title:'אזכור כאב בכתף',visit:'V2',page:3,line:12,evidence:'דוגמה סינתטית: תועד כאב בכתף. לא נרשמה קביעה לגבי הסיבה.'},
+  {id:'E2',type:'medication',title:'אזכור תרופה לשיכוך כאב',visit:'V2',page:3,line:16,evidence:'דוגמה סינתטית: נרשמה התייחסות לתרופה לשיכוך כאב.'},
+  {id:'E3',type:'test',title:'אזכור בדיקת דימות',visit:'V1',page:5,line:8,evidence:'דוגמה סינתטית: נושא הדימות עלה בשיחה; לא תועדה תוצאה.'},
+  {id:'E4',type:'treatment',title:'דיון על פיזיותרפיה',visit:'V1',page:5,line:10,evidence:'דוגמה סינתטית: נדונה אפשרות לפיזיותרפיה. לא צוין שהטיפול בוצע.'},
+  {id:'E5',type:'diagnosis',title:'אזכור נזלת עונתית',visit:'V3',page:2,line:9,evidence:'דוגמה סינתטית: אזכור נזלת במסגרת ביקור שגרתי.'},
+  {id:'E6',type:'referral',title:'הפניה לבירור',visit:'',page:6,line:10,evidence:'דוגמה סינתטית: נמצאה הפניה ללא שיוך ודאי לביקור.'},
+  {id:'E7',type:'test',title:'אזכור בדיקת מעבדה ללא ביקור משויך',visit:'',page:6,line:18,evidence:'דוגמה סינתטית: נמצא שם בדיקה. אין די ראיות לשיוך לביקור.'}
+]);
+const $ = id => document.getElementById(id);
+const log = [];
+let incident = '', visitFilter = '*', relationFilter = '*', editing = null, editorTrigger = null;
+const toDate = iso => iso.split('-').reverse().join('.');
+const visitLabel = v => `${toDate(v.date)} · ${v.title}`;
+const visitName = id => id ? visitLabel(visits.find(v=>v.id===id)) : 'ללא שיוך לביקור';
+const scoped = (id, date = incident) => log.filter(r => r.incident === date && r.entityId === id);
+const current = item => {
+  const r = scoped(item.id).at(-1);
+  return { ...item, relation:'unreviewed', validation:'pending', correction:'', reason:'', ...r };
+};
+function element(tag, value, className) {
+  const node = document.createElement(tag);
+  if (value !== undefined) node.textContent = value;
+  if (className) node.className = className;
+  return node;
+}
+function options(id, entries) {
+  $(id).replaceChildren(...entries.map(([v,t]) => {
+    const o = element('option',t); o.value=v; return o;
+  }));
+}
+function button(text, pressed, callback, className) {
+  const node = element('button',text,className); node.type='button';
+  if (pressed !== null) node.setAttribute('aria-pressed',String(pressed));
+  node.addEventListener('click',callback); return node;
+}
+function recordCard(r) {
+  const card = element('article',undefined,'record');
+  const body = element('div');
+  body.append(element('h5',r.correction || r.title),element('p',`עמוד ${r.page}, שורה ${r.line}`,'subtle'));
+  const tags = element('div',undefined,'metadata');
+  tags.append(element('span',relations[r.relation],r.relation==='unreviewed'?'badge':'badge accent'),
+              element('span',validations[r.validation],'badge'));
+  body.append(tags);
+  const reviewButton = button('בדיקת מקור',null,e => open(r.id,e.currentTarget));
+  reviewButton.dataset.entityId = r.id;
+  reviewButton.setAttribute('aria-label',`בדיקת מקור: ${r.correction || r.title}`);
+  card.append(body,reviewButton);
+  return card;
+}
+function groupedCards(visible) {
+  const groups = new Map();
+  for (const record of visible) {
+    if (!groups.has(record.visit)) groups.set(record.visit,new Map());
+    const byCategory = groups.get(record.visit);
+    if (!byCategory.has(record.type)) byCategory.set(record.type,[]);
+    byCategory.get(record.type).push(record);
+  }
+  const sections = [];
+  for (const visit of [...visits.map(v=>v.id),'']) {
+    const byCategory = groups.get(visit);
+    if (!byCategory) continue;
+    const section = element('section',undefined,'visit-group');
+    const heading = element('h3',visitName(visit));
+    heading.id=`visit-group-${visit || 'unassigned'}`;
+    section.setAttribute('aria-labelledby',heading.id);
+    section.append(heading);
+    for (const [type,label] of Object.entries(categories)) {
+      const records = byCategory.get(type);
+      if (!records) continue;
+      const group = element('div',undefined,'category-group');
+      group.append(element('h4',`${label} · ${records.length}`),...records.map(recordCard));
+      section.append(group);
+    }
+    sections.push(section);
+  }
+  return sections;
+}
+function redraw() {
+  const records = entities.map(current);
+  const visitOptions = [['*','כל הביקורים'], ...visits.map(v=>[v.id,visitLabel(v)]), ['',visitName('')]];
+  $('visit-list').replaceChildren(...visitOptions.map(([id,label]) => {
+    const b = button(label, visitFilter === id, () => { visitFilter = id; redraw(); $('visit-list').querySelector('[aria-pressed=true]').focus(); });
+    const n = id === '*' ? records.length : records.filter(e=>e.visit===id).length;
+    b.append(element('small', `${n} ישויות`)); return b;
+  }));
+  $('stats').replaceChildren(...Object.entries(relations).map(([id,label]) => {
+    const b = button(label,relationFilter===id,()=>{relationFilter=relationFilter===id?'*':id;redraw();$('stats').children[Object.keys(relations).indexOf(id)].focus();},'stat');
+    b.append(element('strong', records.filter(e=>e.relation===id).length)); return b;
+  }));
+  const query = $('search').value.trim().toLocaleLowerCase('he');
+  const kind = $('category-filter').value;
+  const visible = records.filter(r => (visitFilter==='*' || r.visit===visitFilter) &&
+    (relationFilter==='*' || r.relation===relationFilter) && (kind==='*' || r.type===kind) &&
+    (!query || `${r.correction || r.title} ${r.title} ${categories[r.type]}`.toLocaleLowerCase('he').includes(query)));
+  $('counts').textContent = `מוצגות ${visible.length} מתוך ${records.length} ישויות`;
+  $('records').replaceChildren(...(visible.length ? groupedCards(visible) : [element('p','אין רשומות שתואמות למסננים.','empty subtle')]));
+}
+function open(id, trigger) {
+  editing = id; editorTrigger = trigger;
+  const original = entities.find(e=>e.id===id);
+  const r = current(original);
+  $('review-title').textContent = original.title;
+  $('source-ref').textContent = `עמוד ${original.page} · שורה ${original.line}`;
+  $('evidence').textContent = original.evidence;
+  $('review-event').textContent = incident ? `אירוע: ${toDate(incident)}. שיוך לביקור אינו הוכחה לקשר.` : 'יש לבחור תאריך אירוע לפני שמירת החלטה.';
+  for (const [id,value] of [['relation',r.relation],['validation',r.validation],['edit-category',r.type],['edit-visit',r.visit],['correction',r.correction],['reason','']]) $(id).value=value;
+  $('save').disabled=!incident;
+  $('form-error').textContent='';
+  const history=scoped(id).slice().reverse();
+  $('history').replaceChildren(...(history.length ? history.map(h=>element('li',`${new Date(h.at).toLocaleString('he-IL')} · ${relations[h.relation]} · ${validations[h.validation]} · ${categories[h.type]} · ${visitName(h.visit)}${h.correction ? ` · ${h.correction}` : ''} · ${h.reason}`)) : [element('li','אין החלטות קודמות באירוע זה.')]));
+  $('review').showModal();
+}
+options('category-filter', [['*','כל הקטגוריות'],...Object.entries(categories)]);
+options('edit-category',Object.entries(categories));
+options('edit-visit',[['','ללא שיוך'],...visits.map(v=>[v.id,visitLabel(v)])]);
+options('relation',Object.entries(relations));
+options('validation',Object.entries(validations));
+$('active-event').textContent='לא נבחר תאריך';
+$('incident-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  if (!$('event-date').value || !$('event-date').validity.valid) return;
+  incident=$('event-date').value;
+  $('active-event').textContent=`אירוע נבחר: ${toDate(incident)}`;
+  $('message').textContent='החלטות בדמו נשמרות רק עד לסגירת הדף או רענונו.';
+  visitFilter='*'; relationFilter='*'; redraw();
+});
+$('review-form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const reason=$('reason').value.trim(), correction=$('correction').value.trim();
+  const validation=$('validation').value;
+  if (!editing || !incident || !reason) { $('form-error').textContent='יש לבחור אירוע ולהוסיף נימוק שאינו ריק.'; return; }
+  const original=entities.find(item=>item.id===editing);
+  const type=$('edit-category').value, visit=$('edit-visit').value;
+  if (validation==='corrected' && (!correction || correction===original.title) && type===original.type && visit===original.visit) {
+    $('form-error').textContent='לאימות מסוג „תוקן” יש לשנות את הנוסח, הקטגוריה או הביקור המשויך.';
+    return;
+  }
+  const revision={entityId:editing,incident,at:new Date().toISOString(),reason,correction,validation,relation:$('relation').value,type,visit};
+  log.push(revision);
+  $('review').close();
+  $('message').textContent='ההחלטה נוספה להיסטוריית הדמו. הרשומה המקורית לא שונתה.';
+  redraw();
+  const next = Array.from($('records').querySelectorAll('button')).find(b=>b.dataset.entityId===revision.entityId);
+  (next || $('category-filter')).focus();
+});
+$('search').addEventListener('input', redraw);
+$('category-filter').addEventListener('change', redraw);
+$('close').addEventListener('click',()=>$('review').close());
+$('review').addEventListener('close',()=>{ if(document.activeElement===$('review') || document.activeElement===document.body) editorTrigger?.focus(); editing=null; });
+redraw();
+</script>
+</body>
+</html>

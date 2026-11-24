@@ -1,0 +1,20 @@
+id: clinical-review-360
+name: Clinical Review 360
+version: 1.0.0
+services:
+  auth:
+    enabled: true
+    fabric:
+      enabled: true
+  data:
+    enabled: false
+  staticHosting:
+    enabled: true
+    folder: dist
+    buildCommand: npm run build
+    indexDocument: index.html
+    assetAccess: protected
+  storage:
+    enabled: false
+  functions:
+    enabled: false

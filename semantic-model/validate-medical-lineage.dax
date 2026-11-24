@@ -1,0 +1,21 @@
+EVALUATE
+ROW(
+    "Source documents", COUNTROWS('domain_source_documents'),
+    "Extraction runs", COUNTROWS('domain_extraction_runs'),
+    "Visit candidates", [Visit candidates],
+    "Diagnosis mentions", [Diagnosis mentions],
+    "Medication mentions", [Medication mentions],
+    "Test mentions", [Test mentions],
+    "Treatment mentions", [Treatment mentions],
+    "Referral mentions", [Referral mentions],
+    "Clinical candidates", [Clinical candidates],
+    "Standalone date mentions", [Standalone date mentions],
+    "All candidates", [All extraction candidates],
+    "Needing review", [Candidates needing review],
+    "Runs through an empty document filter",
+        COALESCE(CALCULATE(COUNTROWS('domain_extraction_runs'), FILTER(ALL('domain_source_documents'), FALSE())), 0),
+    "Candidates through an empty document filter",
+        CALCULATE([All extraction candidates], FILTER(ALL('domain_source_documents'), FALSE())),
+    "Candidates through an empty run filter",
+        CALCULATE([All extraction candidates], FILTER(ALL('domain_extraction_runs'), FALSE()))
+)

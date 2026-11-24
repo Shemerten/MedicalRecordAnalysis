@@ -1,0 +1,23 @@
+{
+  "name": "pdf-data-uploader",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["rayfin/functions"],
+  "scripts": {
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run typecheck && npm run build --workspace pdf-uploader-functions && node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@microsoft/rayfin-auth": "2.0.1",
+    "@microsoft/rayfin-auth-provider-fabric": "2.0.1",
+    "@microsoft/rayfin-client": "2.0.1",
+    "@microsoft/rayfin-functions": "2.0.1"
+  },
+  "devDependencies": {
+    "@microsoft/rayfin-cli": "2.0.1",
+    "typescript": "5.9.3",
+    "vite": "7.3.8"
+  }
+}

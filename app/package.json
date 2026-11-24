@@ -1,0 +1,16 @@
+{
+  "name": "clinical-review-360",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node build.cjs"
+  },
+  "devDependencies": {
+    "@microsoft/rayfin-cli": "2.0.1"
+  },
+  "dependencies": {
+    "@microsoft/rayfin-connector-fabric-graphql": "2.0.1",
+    "@microsoft/rayfin-connectors": "2.0.1",
+    "@microsoft/rayfin-core": "2.0.1"
+  }
+}

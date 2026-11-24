@@ -1,0 +1,112 @@
+createOrReplace
+
+	relationship b84e8d40-1768-4ead-89a0-2b7dccb40f01
+		fromColumn: domain_extraction_runs.document_id
+		toColumn: domain_source_documents.document_id
+		fromCardinality: many
+		toCardinality: one
+		crossFilteringBehavior: oneDirection
+
+	relationship b84e8d40-1768-4ead-89a0-2b7dccb40f02
+		fromColumn: domain_visit_candidates.run_key
+		toColumn: domain_extraction_runs.run_key
+		fromCardinality: many
+		toCardinality: one
+		crossFilteringBehavior: oneDirection
+
+	relationship b84e8d40-1768-4ead-89a0-2b7dccb40f03
+		fromColumn: domain_diagnosis_mentions.run_key
+		toColumn: domain_extraction_runs.run_key
+		fromCardinality: many
+		toCardinality: one
+		crossFilteringBehavior: oneDirection
+
+	relationship b84e8d40-1768-4ead-89a0-2b7dccb40f04
+		fromColumn: domain_medication_mentions.run_key
+		toColumn: domain_extraction_runs.run_key
+		fromCardinality: many
+		toCardinality: one
+		crossFilteringBehavior: oneDirection
+
+	relationship b84e8d40-1768-4ead-89a0-2b7dccb40f05
+		fromColumn: domain_test_mentions.run_key
+		toColumn: domain_extraction_runs.run_key
+		fromCardinality: many
+		toCardinality: one
+		crossFilteringBehavior: oneDirection
+
+	relationship b84e8d40-1768-4ead-89a0-2b7dccb40f06
+		fromColumn: domain_treatment_mentions.run_key
+		toColumn: domain_extraction_runs.run_key
+		fromCardinality: many
+		toCardinality: one
+		crossFilteringBehavior: oneDirection
+
+	relationship b84e8d40-1768-4ead-89a0-2b7dccb40f07
+		fromColumn: domain_referral_mentions.run_key
+		toColumn: domain_extraction_runs.run_key
+		fromCardinality: many
+		toCardinality: one
+		crossFilteringBehavior: oneDirection
+
+	relationship b84e8d40-1768-4ead-89a0-2b7dccb40f08
+		fromColumn: domain_date_mentions.run_key
+		toColumn: domain_extraction_runs.run_key
+		fromCardinality: many
+		toCardinality: one
+		crossFilteringBehavior: oneDirection
+
+	ref table domain_visit_candidates
+		/// Extracted visit candidates, not confirmed encounters.
+		measure 'Visit candidates' = COALESCE(COUNTROWS('domain_visit_candidates'), 0)
+			formatString: #,##0
+
+	ref table domain_diagnosis_mentions
+		/// Text mentions classified as diagnosis candidates, not verified diagnoses.
+		measure 'Diagnosis mentions' = COALESCE(COUNTROWS('domain_diagnosis_mentions'), 0)
+			formatString: #,##0
+
+	ref table domain_medication_mentions
+		/// Medication mentions, not proof of prescriptions or adherence.
+		measure 'Medication mentions' = COALESCE(COUNTROWS('domain_medication_mentions'), 0)
+			formatString: #,##0
+
+	ref table domain_test_mentions
+		/// Test mentions, not proof of ordering, completion, or results.
+		measure 'Test mentions' = COALESCE(COUNTROWS('domain_test_mentions'), 0)
+			formatString: #,##0
+
+	ref table domain_treatment_mentions
+		/// Treatment mentions, not proof of treatment delivery.
+		measure 'Treatment mentions' = COALESCE(COUNTROWS('domain_treatment_mentions'), 0)
+			formatString: #,##0
+
+	ref table domain_referral_mentions
+		/// Referral mentions, not proof of issuance or follow-through.
+		measure 'Referral mentions' = COALESCE(COUNTROWS('domain_referral_mentions'), 0)
+			formatString: #,##0
+
+	ref table domain_date_mentions
+		/// Standalone date mentions; not encounter or incident dates.
+		measure 'Standalone date mentions' = COALESCE(COUNTROWS('domain_date_mentions'), 0)
+			formatString: #,##0
+
+	ref table domain_extraction_runs
+		/// Clinical candidate count including visits and excluding standalone dates. Filter by source document or extraction run for cross-entity totals.
+		measure 'Clinical candidates' = [Visit candidates] + [Diagnosis mentions] + [Medication mentions] + [Test mentions] + [Treatment mentions] + [Referral mentions]
+			formatString: #,##0
+
+		/// All extracted candidates, including standalone dates. Not a count of medical events.
+		measure 'All extraction candidates' = [Clinical candidates] + [Standalone date mentions]
+			formatString: #,##0
+
+		/// All categories with extraction review status needs_review; not clinician decisions.
+		measure 'Candidates needing review' =
+				CALCULATE([Visit candidates], KEEPFILTERS('domain_visit_candidates'[review_status] = "needs_review"))
+				+ CALCULATE([Diagnosis mentions], KEEPFILTERS('domain_diagnosis_mentions'[review_status] = "needs_review"))
+				+ CALCULATE([Medication mentions], KEEPFILTERS('domain_medication_mentions'[review_status] = "needs_review"))
+				+ CALCULATE([Test mentions], KEEPFILTERS('domain_test_mentions'[review_status] = "needs_review"))
+				+ CALCULATE([Treatment mentions], KEEPFILTERS('domain_treatment_mentions'[review_status] = "needs_review"))
+				+ CALCULATE([Referral mentions], KEEPFILTERS('domain_referral_mentions'[review_status] = "needs_review"))
+				+ CALCULATE([Standalone date mentions], KEEPFILTERS('domain_date_mentions'[review_status] = "needs_review"))
+			formatString: #,##0
